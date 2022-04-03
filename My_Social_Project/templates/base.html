@@ -15,6 +15,10 @@
         {% endblock title %}
 
     </title>
+        {% block css_block %}
+
+        {% endblock css_block %}
+
   </head>
   <body>
     
@@ -28,7 +32,7 @@
         </ul>
         
     </nav>
-
+    <br>
     <div class="container" style="padding-top 20px;">
       {% block body_block %}
       {% endblock body_block %}
