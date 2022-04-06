@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponseRedirect
-from App_Login.forms import CreateNewUser
+from App_Login.forms import CreateNewUser, EditProfile
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse, reverse_lazy
 from App_Login.models import UserProfile
@@ -30,6 +30,15 @@ def login_page(request):
             user = authenticate(username=username, password=password)
             if user is not None:
                 login(request,user)
-                return HttpResponseRedirect(reverse(''))
+                return HttpResponseRedirect(reverse('App_Login:edit'))
     return render(request, 'App_Login/login.html',
                   context={'title':'Login Page', 'form':form})
+    
+    
+@login_required
+def edit_profile(request):
+    current_user = UserProfile.objects.get(user=request.user)
+    form = EditProfile(instance=current_user)
+    return render(request, 'App_Login/profile.html',
+                  context={'title':'Edit profile Page',
+                           'form':form})

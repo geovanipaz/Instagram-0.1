@@ -22,7 +22,7 @@
   <center>
     <div class="sign_up">
       <h3>Sign Up to see Profile</h3><br>
-      <form method="">
+      <form method="post">
         {{ form|crispy }}
         {% csrf_token %}
         <button type="submit" 
@@ -31,7 +31,7 @@
     </div>
 
     <div class="login">
-      <p>Have on Acoount? <a href="">Login</a></p>
+      <p>Have on Acoount? <a href="{% url 'App_Login:login' %}">Login</a></p>
     </div>
   </center>
   
