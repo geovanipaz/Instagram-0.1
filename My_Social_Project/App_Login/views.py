@@ -39,6 +39,22 @@ def login_page(request):
 def edit_profile(request):
     current_user = UserProfile.objects.get(user=request.user)
     form = EditProfile(instance=current_user)
+    if request.method == 'POST':
+        form = EditProfile(
+            request.POST,
+            request.FILES,
+            instance=current_user
+            )
+        if form.is_valid():
+            form.save(commit=True)
+            form = EditProfile(instance=current_user)
+        
+    
     return render(request, 'App_Login/profile.html',
                   context={'title':'Edit profile Page',
                            'form':form})
+    
+@login_required    
+def logout_user(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('App_Login:login'))
