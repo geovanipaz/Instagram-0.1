@@ -5,6 +5,8 @@ from django.urls import reverse, reverse_lazy
 from App_Login.models import UserProfile
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from .models import User
+from App_Posts.forms import PostForm
 
 def sign_up(request):
     form  = CreateNewUser()
@@ -62,5 +64,26 @@ def logout_user(request):
 
 @login_required
 def profile(request):
+    form = PostForm()
+    if request.method == 'POST':
+        form = PostForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
+            return HttpResponseRedirect(reverse('home'))
+    
+    
+    
     return render(request, 'App_Login/user.html',
-                  context={'title':'User profile'})
+                  context={'title':'User profile',
+                           'form':form}
+                  )
+    
+@login_required
+def user(request, username):
+    user_other = User.objects.get(username=username)
+    if user == request.user:
+        return HttpResponseRedirect(reverse('App_Login:profile'))
+    return render(request, 'App_Login/user_other.html',
+                  context={'user_other':user_other})
