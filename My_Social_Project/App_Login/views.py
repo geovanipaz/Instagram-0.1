@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 from .models import User
 from App_Posts.forms import PostForm
 
+
+#cadastra um usuário
 def sign_up(request):
     form  = CreateNewUser()
     registered = False
@@ -21,7 +23,8 @@ def sign_up(request):
             return HttpResponseRedirect(reverse('App_Login:login'))
     return render(request,'App_Login/signup.html',
                   context={'title':'Sign Up Form Here', 'form':form})
-        
+    
+#faz login na conta      
 def login_page(request):
     form = AuthenticationForm()
     if request.method == 'POST':
@@ -36,7 +39,8 @@ def login_page(request):
     return render(request, 'App_Login/login.html',
                   context={'title':'Login Page', 'form':form})
     
-    
+
+#edita o perfil já cadastrado   
 @login_required
 def edit_profile(request):
     current_user = UserProfile.objects.get(user=request.user)
@@ -62,6 +66,7 @@ def logout_user(request):
     logout(request)
     return HttpResponseRedirect(reverse('App_Login:login'))
 
+#pagina de perfil
 @login_required
 def profile(request):
     form = PostForm()
@@ -72,8 +77,6 @@ def profile(request):
             post.author = request.user
             post.save()
             return HttpResponseRedirect(reverse('home'))
-    
-    
     
     return render(request, 'App_Login/user.html',
                   context={'title':'User profile',
